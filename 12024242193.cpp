@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <string>
 #include <limits>
+#define MAXSIZE 100
+typedef int ElemType;
 
 // Simple data structure demo program (refactored I/O)
 
@@ -32,6 +34,115 @@ void realSwitchByAlias(int &a, int &b)
     int temp = a;
     a = b;
     b = temp;
+}
+
+// --- Sequential List ---
+typedef int ElemType;
+typedef struct
+{
+    ElemType data[MAXSIZE];
+    int length;
+} SqList;
+
+void createSeq(SqList &L)
+{
+    int i;
+    std::cout << "请输入线性表的长度: ";
+    std::cin >> L.length;
+    std::cout << "请依次输入线性表的元素: ";
+    for (i = 0; i < L.length; i++)
+        std::cin >> L.data[i];
+    std::cout << "线性表创建成功！" << std::endl;
+}
+void insertPre(SqList &L, int i, ElemType e) // 前插入
+{
+    int j;
+    if (i < 1 || i > L.length + 1)
+    {
+        std::cout << "插入位置不合法！" << std::endl;
+        return;
+    }
+    if (L.length >= MAXSIZE)
+    {
+        std::cout << "线性表已满，无法插入！" << std::endl;
+        return;
+    }
+    for (j = L.length; j >= i; j--)
+        L.data[j] = L.data[j - 1];
+    L.data[i - 1] = e;
+    L.length++;
+    std::cout << "插入成功！" << std::endl;
+}
+void insertPost(SqList &L, int i, ElemType e) // 后插入
+{
+    int j;
+    if (i < 1 || i > L.length + 1)
+    {
+        std::cout << "插入位置不合法！" << std::endl;
+        return;
+    }
+    if (L.length >= MAXSIZE)
+    {
+        std::cout << "线性表已满，无法插入！" << std::endl;
+        return;
+    }
+    for (j = L.length; j >= i; j--)
+        L.data[j] = L.data[j - 1];
+    L.data[i] = e;
+    L.length++;
+    std::cout << "插入成功！" << std::endl;
+}
+void deleteV(SqList &L, ElemType e) // 按值删除
+{
+    int i, j;
+    for (i = 0; i < L.length; i++)
+    {
+        if (L.data[i] == e)
+            break;
+    }
+    if (i >= L.length)
+    {
+        std::cout << "未找到该元素！" << std::endl;
+        return;
+    }
+    for (j = i; j < L.length - 1; j++)
+        L.data[j] = L.data[j + 1];
+    L.length--;
+    std::cout << "删除成功！" << std::endl;
+}
+void deleteP(SqList &L, int i) // 按位删除
+{
+    int j;
+    if (i < 1 || i > L.length)
+    {
+        std::cout << "删除位置不合法！" << std::endl;
+        return;
+    }
+    for (j = i - 1; j < L.length - 1; j++)
+        L.data[j] = L.data[j + 1];
+    L.length--;
+    std::cout << "删除成功！" << std::endl;
+}
+void locate(SqList L, ElemType e) // 按值查找
+{
+    int i;
+    for (i = 0; i < L.length; i++)
+    {
+        if (L.data[i] == e)
+        {
+            std::cout << "元素 " << e << " 位于位置 " << (i + 1) << std::endl;
+            return;
+        }
+    }
+    std::cout << "未找到该元素！" << std::endl;
+}
+void printList(SqList L)
+{
+    int i;
+    std::cout << "线性表元素: ";
+    for (i = 0; i < L.length; i++)
+        std::cout << L.data[i] << ' ';
+    std::cout << std::endl;
 }
 
 // --- Menus ---
@@ -85,13 +196,16 @@ void menu1_1()
             std::cout << "未知命令！" << std::endl;
         }
 
-        pause();
+        // pause();
     }
 }
 
 void menu2_1()
 {
+    SqList L;
+    int i;
     int code;
+    ElemType a;
     while (true)
     {
         clearScreen();
@@ -102,6 +216,7 @@ void menu2_1()
                   << "\t\t\t\t4. deleteV\n"
                   << "\t\t\t\t5. deleteP\n"
                   << "\t\t\t\t6. locate\n"
+                  << "\t\t\t\t7. printList\n"
                   << "\t\t\t\t0. 返回\n"
                   << "\t\t\t\t===================================\n";
 
@@ -118,16 +233,37 @@ void menu2_1()
         switch (code)
         {
         case 1:
-            // create_seq();
+            createSeq(L);
             break;
         case 2:
-
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertPre(L, i, a);
             break;
         case 3:
-
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertPost(L, i, a);
             break;
         case 4:
-
+            std::cout << "请输入要删除的元素值: ";
+            std::cin >> a;
+            deleteV(L, a);
+            break;
+        case 5:
+            std::cout << "请输入要删除的位置: ";
+            std::cin >> i;
+            deleteP(L, i);
+            break;
+        case 6:
+            std::cout << "请输入要查找的元素值: ";
+            std::cin >> a;
+            locate(L, a);
+            break;
+        case 7:
+            printList(L);
             break;
         case 0:
             std::cout << "感谢您的使用！" << std::endl;
@@ -136,7 +272,7 @@ void menu2_1()
             std::cout << "未知命令！" << std::endl;
         }
 
-        pause();
+        // pause();
     }
 }
 
@@ -188,7 +324,7 @@ void menu1()
             std::cout << "未知命令！" << std::endl;
         }
 
-        pause();
+        // pause();
     }
 }
 
@@ -213,7 +349,7 @@ void menu2()
         std::cout << "\t6. 应用二\n";
         std::cout << "\t0. 退出\n";
         std::cout << "============================================\n";
-        std::cout << "请选择功能<0-6>: ";
+        std::cout << "请输入命令序号: ";
 
         if (!(std::cin >> ch1))
         {
@@ -249,11 +385,6 @@ void menu2()
         default:
             std::cout << "未进行任何操作!" << std::endl;
         }
-
-        std::cout << "\n想要继续操作请按 y (否则任意键退出): ";
-        std::string yn;
-        std::cin >> yn;
-        ch2 = yn.empty() ? '\0' : yn[0];
     } while (ch2 == 'y'); // 条件判断
 }
 
@@ -295,7 +426,7 @@ void main_menu()
             std::cout << "未知命令！" << std::endl;
         }
 
-        pause();
+        // pause();
     }
 }
 
