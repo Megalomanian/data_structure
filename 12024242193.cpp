@@ -275,6 +275,39 @@ void menu2_1()
         // pause();
     }
 }
+void menu2_2()
+{
+    int code;
+    while (true)
+    {
+        clearScreen();
+        std::cout << "\n\t\t\t\t=======单链表=======\n"
+                  << "\t\t\t\t1. create\n"
+                  << "\t\t\t\t2. insertpre\n"
+                  << "\t\t\t\t3. insertpost\n"
+                  << "\t\t\t\t4. deleteV\n"
+                  << "\t\t\t\t5. deleteP\n"
+                  << "\t\t\t\t6. locate\n"
+                  << "\t\t\t\t7. printList\n"
+                  << "\t\t\t\t0. 返回\n"
+                  << "\t\t\t\t===================================\n";
+        std::cout << "\n请输入命令序号: ";
+        if (!(std::cin >> code))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "无效输入，请输入数字。" << std::endl;
+            pause();
+            continue;
+        }
+        switch (code)
+        {
+            case 0:
+                return;
+            case 1:
+        }
+    }
+}
 
 void menu1()
 {
@@ -366,7 +399,7 @@ void menu2()
             menu2_1();
             break;
         case 2:
-
+            menu2_2();
             break;
         case 3:
 
