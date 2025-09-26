@@ -139,9 +139,344 @@ void locate(SqList L, ElemType e) // 按值查找
 void printList(SqList L)
 {
     int i;
+    if (L.length <= 0)
+    {
+        std::cout << "线性表为空或未初始化。请先创建线性表。" << std::endl;
+        return;
+    }
     std::cout << "线性表元素: ";
     for (i = 0; i < L.length; i++)
         std::cout << L.data[i] << ' ';
+    std::cout << std::endl;
+}
+
+// linked list
+typedef struct LNode
+{
+    ElemType data;
+    struct LNode *next;
+} LNode, *LinkList;
+void createLinkList(LinkList &L)
+{
+    L = (LNode *)malloc(sizeof(LNode));
+    L->next = nullptr; // Initialize head node
+    LNode *tail = L;   // Tail pointer for efficient insertion
+    int n;
+    std::cout << "请输入单链表的长度: ";
+    std::cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        LNode *newNode = new LNode;
+        std::cout << "请输入第 " << (i + 1) << " 个元素: ";
+        std::cin >> newNode->data;
+        tail->next = newNode;
+        newNode->next = nullptr;
+        tail = newNode; // Move tail to the new node
+    }
+    std::cout << "单链表创建成功！" << std::endl;
+}
+void insertPreNode(LinkList &L, int n, ElemType e) // Insert before node p
+{
+    if (n < 1)
+    {
+        std::cout << "插入位置不合法！" << std::endl;
+        return;
+    }
+    if (L->next == nullptr) // List is empty
+    {
+        std::cout << "单链表为空，无法插入！" << std::endl;
+        return;
+    }
+    LNode *p = L->next;
+    for (int i = 1; i < n && p != nullptr; i++)
+        p = p->next;
+    LNode *newNode = new LNode;
+    newNode->data = e;
+    // To insert before p, we need to find the node before p
+    LNode *prev = L;
+    while (prev->next != nullptr && prev->next != p)
+        prev = prev->next;
+    if (prev->next == nullptr)
+    {
+        std::cout << "未找到指定节点，无法插入！" << std::endl;
+        delete newNode;
+        return;
+    }
+    newNode->next = p;
+    prev->next = newNode;
+    std::cout << "插入成功！" << std::endl;
+}
+void insertAfterLinkNode(LinkList &L, int n, ElemType e) // Insert after node p
+{
+    LNode *p = L->next;
+    for (int i = 1; i < n && p != nullptr; i++)
+        p = p->next;
+    if (L->next == nullptr) // List is empty
+    {
+        std::cout << "单链表为空，无法插入！" << std::endl;
+        return;
+    }
+    LNode *newNode = new LNode;
+    newNode->data = e;
+    newNode->next = p->next;
+    p->next = newNode;
+    std::cout << "插入成功！" << std::endl;
+}
+void deleteLinkValue(LinkList &L, ElemType e) // Delete by value
+{
+    if (L->next == nullptr) // List is empty
+    {
+        std::cout << "单链表为空，无法删除！" << std::endl;
+        return;
+    }
+    LNode *prev = L;
+    LNode *curr = L->next;
+    while (curr != nullptr && curr->data != e)
+    {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (curr == nullptr)
+    {
+        std::cout << "未找到该元素，无法删除！" << std::endl;
+        return;
+    }
+    prev->next = curr->next;
+    delete curr;
+    std::cout << "删除成功！" << std::endl;
+}
+void deleteLinkPosition(LinkList &L, int i) // Delete node p
+{
+    if (i < 1)
+    {
+        std::cout << "删除位置不合法！" << std::endl;
+        return;
+    }
+    LNode *p = L->next;
+    for (int j = 1; j < i && p != nullptr; j++)
+        p = p->next;
+    if (L->next == nullptr) // List is empty
+    {
+        std::cout << "单链表为空，无法删除！" << std::endl;
+        return;
+    }
+    LNode *prev = L;
+    while (prev->next != nullptr && prev->next != p)
+        prev = prev->next;
+    if (prev->next == nullptr)
+    {
+        std::cout << "未找到指定节点，无法删除！" << std::endl;
+        return;
+    }
+    prev->next = p->next;
+    delete p;
+    std::cout << "删除成功！" << std::endl;
+}
+void locateLinkValue(LinkList L, ElemType e) // Locate by value
+{
+    if (L->next == nullptr) // List is empty
+    {
+        std::cout << "单链表为空，无法查找！" << std::endl;
+        return;
+    }
+    LNode *p = L->next;
+    int pos = 1;
+    while (p != nullptr)
+    {
+        if (p->data == e)
+        {
+            std::cout << "元素 " << e << " 位于位置 " << pos << std::endl;
+            return;
+        }
+        p = p->next;
+        pos++;
+    }
+    std::cout << "未找到该元素！" << std::endl;
+}
+void printLinkList(LinkList L)
+{
+    if (L == nullptr)
+    {
+        std::cout << "单链表未创建。请先创建单链表。" << std::endl;
+        return;
+    }
+    if (L->next == nullptr)
+    {
+        std::cout << "单链表为空！" << std::endl;
+        return;
+    }
+    LNode *p = L->next;
+    std::cout << "单链表元素: ";
+    while (p != nullptr)
+    {
+        std::cout << p->data << ' ';
+        p = p->next;
+    }
+    std::cout << std::endl;
+}
+
+// circular single linked list
+typedef struct CSNode
+{
+    ElemType data;
+    struct CSNode *next;
+} CSNode, *CLinkList;
+void createCLinkList(CLinkList &L)
+{
+    L = new CSNode;
+    L->next = L;      // Initialize circular link
+    CSNode *tail = L; // Tail pointer for efficient insertion
+    int n;
+    std::cout << "请输入循环单链表的长度: ";
+    std::cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        CSNode *newNode = new CSNode;
+        std::cout << "请输入第 " << (i + 1) << " 个元素: ";
+        std::cin >> newNode->data;
+        tail->next = newNode;
+        newNode->next = L; // Maintain circular link
+        tail = newNode;    // Move tail to the new node
+    }
+    std::cout << "循环单链表创建成功！" << std::endl;
+}
+void insertPreCLinkNode(CLinkList &L, int n, ElemType e) // Insert before node p
+{
+    if (n < 1)
+    {
+        std::cout << "插入位置不合法！" << std::endl;
+        return;
+    }
+    if (L->next == L) // List is empty
+    {
+        std::cout << "循环单链表为空，无法插入！" << std::endl;
+        return;
+    }
+    CSNode *p = L->next;
+    for (int i = 1; i < n && p != L; i++)
+        p = p->next;
+    CSNode *newNode = new CSNode;
+    newNode->data = e;
+    // To insert before p, we need to find the node before p
+    CSNode *prev = L;
+    while (prev->next != L && prev->next != p)
+        prev = prev->next;
+    if (prev->next == L)
+    {
+        std::cout << "未找到指定节点，无法插入！" << std::endl;
+        delete newNode;
+        return;
+    }
+    newNode->next = p;
+    prev->next = newNode;
+    std::cout << "插入成功！" << std::endl;
+}
+void insertAfterCLinkNode(CLinkList &L, int n, ElemType e) // Insert after node p
+{
+    CSNode *p = L->next;
+    for (int i = 1; i < n && p != L; i++)
+        p = p->next;
+    if (L->next == L) // List is empty
+    {
+        std::cout << "循环单链表为空，无法插入！" << std::endl;
+        return;
+    }
+    CSNode *newNode = new CSNode;
+    newNode->data = e;
+    newNode->next = p->next;
+    p->next = newNode;
+    std::cout << "插入成功！" << std::endl;
+}
+void deleteCLinkValue(CLinkList &L, ElemType e) // Delete by value
+{
+    if (L->next == L) // List is empty
+    {
+        std::cout << "循环单链表为空，无法删除！" << std::endl;
+        return;
+    }
+    CSNode *prev = L;
+    CSNode *curr = L->next;
+    while (curr != L && curr->data != e)
+    {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (curr == L)
+    {
+        std::cout << "未找到该元素，无法删除！" << std::endl;
+        return;
+    }
+    prev->next = curr->next;
+    delete curr;
+    std::cout << "删除成功！" << std::endl;
+}
+void deleteCLinkPosition(CLinkList &L, int i) // Delete node p
+{
+    if (i < 1)
+    {
+        std::cout << "删除位置不合法！" << std::endl;
+        return;
+    }
+    CSNode *p = L->next;
+    for (int j = 1; j < i && p != L; j++)
+        p = p->next;
+    if (L->next == L) // List is empty
+    {
+        std::cout << "循环单链表为空，无法删除！" << std::endl;
+        return;
+    }
+    CSNode *prev = L;
+    while (prev->next != L && prev->next != p)
+        prev = prev->next;
+    if (prev->next == L)
+    {
+        std::cout << "未找到指定节点，无法删除！" << std::endl;
+        return;
+    }
+    prev->next = p->next;
+    delete p;
+    std::cout << "删除成功！" << std::endl;
+}
+void locateCLinkValue(CLinkList L, ElemType e) // Locate by value
+{
+    if (L->next == L) // List is empty
+    {
+        std::cout << "循环单链表为空，无法查找！" << std::endl;
+        return;
+    }
+    CSNode *p = L->next;
+    int pos = 1;
+    while (p != L)
+    {
+        if (p->data == e)
+        {
+            std::cout << "元素 " << e << " 位于位置 " << pos << std::endl;
+            return;
+        }
+        p = p->next;
+        pos++;
+    }
+    std::cout << "未找到该元素！" << std::endl;
+}
+void printCLinkList(CLinkList L)
+{
+    if (L == nullptr)
+    {
+        std::cout << "循环单链表未创建。请先创建循环单链表。" << std::endl;
+        return;
+    }
+    if (L->next == L)
+    {
+        std::cout << "循环单链表为空！" << std::endl;
+        return;
+    }
+    CSNode *p = L->next;
+    std::cout << "循环单链表元素: ";
+    do
+    {
+        std::cout << p->data << ' ';
+        p = p->next;
+    } while (p != L);
     std::cout << std::endl;
 }
 
@@ -203,13 +538,14 @@ void menu1_1()
 void menu2_1()
 {
     SqList L;
+    L.length = 0; // initialize to empty
     int i;
     int code;
     ElemType a;
     while (true)
     {
         clearScreen();
-        std::cout << "\n\t\t\t\t=======线性表的顺序存储结构=======\n"
+        std::cout << "\n\t\t\t\t=======顺序表=======\n"
                   << "\t\t\t\t1. create\n"
                   << "\t\t\t\t2. insertpre\n"
                   << "\t\t\t\t3. insertpost\n"
@@ -264,6 +600,7 @@ void menu2_1()
             break;
         case 7:
             printList(L);
+            pause();
             break;
         case 0:
             std::cout << "感谢您的使用！" << std::endl;
@@ -277,7 +614,10 @@ void menu2_1()
 }
 void menu2_2()
 {
+    LinkList L = nullptr;
+    int i;
     int code;
+    ElemType a;
     while (true)
     {
         clearScreen();
@@ -291,6 +631,7 @@ void menu2_2()
                   << "\t\t\t\t7. printList\n"
                   << "\t\t\t\t0. 返回\n"
                   << "\t\t\t\t===================================\n";
+
         std::cout << "\n请输入命令序号: ";
         if (!(std::cin >> code))
         {
@@ -300,12 +641,128 @@ void menu2_2()
             pause();
             continue;
         }
+
         switch (code)
         {
-            case 0:
-                return;
-            case 1:
+        case 1:
+            createLinkList(L);
+            break;
+        case 2:
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertPreNode(L, i, a);
+            break;
+        case 3:
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertAfterLinkNode(L, i, a);
+            break;
+        case 4:
+            std::cout << "请输入要删除的元素值: ";
+            std::cin >> a;
+            deleteLinkValue(L, a);
+            break;
+        case 5:
+            std::cout << "请输入要删除的位置: ";
+            std::cin >> i;
+            deleteLinkPosition(L, i);
+            break;
+        case 6:
+            std::cout << "请输入要查找的元素值: ";
+            std::cin >> a;
+            locateLinkValue(L, a);
+            break;
+        case 7:
+            printLinkList(L);
+            pause();
+            break;
+        case 0:
+            std::cout << "感谢您的使用！" << std::endl;
+            return;
+        default:
+            std::cout << "未知命令！" << std::endl;
         }
+
+        // pause();
+    }
+}
+void menu2_3()
+{
+    CLinkList L = nullptr;
+    int i;
+    int code;
+    ElemType a;
+    while (true)
+    {
+        clearScreen();
+        std::cout << "\n\t\t\t\t=======循环单链表=======\n"
+                  << "\t\t\t\t1. create\n"
+                  << "\t\t\t\t2. insertpre\n"
+                  << "\t\t\t\t3. insertpost\n"
+                  << "\t\t\t\t4. deleteV\n"
+                  << "\t\t\t\t5. deleteP\n"
+                  << "\t\t\t\t6. locate\n"
+                  << "\t\t\t\t7. printList\n"
+                  << "\t\t\t\t0. 返回\n"
+                  << "\t\t\t\t===================================\n";
+
+        std::cout << "\n请输入命令序号: ";
+        if (!(std::cin >> code))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "无效输入，请输入数字。" << std::endl;
+            pause();
+            continue;
+        }
+
+        switch ((int)code)
+        {
+        case 1:
+            createCLinkList(L);
+            break;
+        case 2:
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertPreCLinkNode(L, i, a);
+            break;
+        case 3:
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertAfterCLinkNode(L, i, a);
+            break;
+        case 4:
+            std::cout << "请输入要删除的元素值: ";
+            std::cin >> a;
+            deleteCLinkValue(L, a);
+            break;
+        case 5:
+            std::cout << "请输入要删除的位置: ";
+            std::cin >> i;
+            deleteCLinkPosition(L, i);
+            break;
+        case 6:
+            std::cout << "请输入要查找的元素值: ";
+            std::cin >> a;
+            locateCLinkValue(L, a);
+            break;
+        case 7:
+            std::cout << "正在打印：" << std::endl;
+            printCLinkList(L);
+            pause();
+            break;
+        case 0:
+            std::cout << "感谢您的使用！" << std::endl;
+            return;
+        default:
+            std::cout << "未知命令！" << std::endl;
+        }
+
+        // pause();
     }
 }
 
@@ -402,10 +859,9 @@ void menu2()
             menu2_2();
             break;
         case 3:
-
             break;
         case 4:
-
+            menu2_3();
             break;
         case 5:
 
