@@ -44,6 +44,14 @@ typedef struct
     int length;
 } SqList;
 
+void initSeq(SqList &l)
+{
+    for (int i = 0; i < l.length; i++)
+    {
+        l.data[i] = 0;
+    }
+}
+
 void createSeq(SqList &L)
 {
     int i;
@@ -480,6 +488,78 @@ void printCLinkList(CLinkList L)
     std::cout << std::endl;
 }
 
+// Josephus problem
+void SeqJos()
+{
+    SqList l;
+    std::cout << "请输入约瑟夫环的长度：";
+    int length, circle;
+    std::cin >> length;
+    std::cout << "请输入约瑟夫环的密码：";
+    std::cin >> circle;
+    l.length = length;
+    for (int i = 0; i < length; i++)
+    {
+        l.data[i] = 1;
+    }
+    int ptr = 0;
+    int rest = length;
+    int now = 1;
+    while (1)
+    {
+        // printList(l);
+        // pause();
+        ptr = ptr % l.length;
+        if (rest == 1)
+        {
+            printList(l);
+            break;
+        }
+        else if (l.data[ptr] == 0)
+        {
+            ptr++;
+            continue;
+        }
+        else if (now == circle)
+        {
+            now = 0;
+            rest--;
+            l.data[ptr] = 0;
+            ptr++;
+            now++;
+            printList(l);
+            continue;
+        }
+        else
+        {
+            now++;
+            ptr++;
+            continue;
+        }
+    }
+    int final = 0;
+    for (; final < l.length; final++)
+    {
+        if (l.data[final] == 1)
+        {
+            break;
+        }
+    }
+    std::cout << "最后剩下的人是第" << final+1 << "个";
+    pause();
+}
+
+void JosLink()
+{
+    CLinkList L;
+    int length, circle;
+    std::cout << "请输入约瑟夫环的长度：";
+    std::cin >> length;
+    std::cout << "请输入约瑟夫环的密码：";
+    std::cin >> circle;
+    createCLinkList(L);
+}
+
 // --- Menus ---
 void menu1_1()
 {
@@ -688,7 +768,86 @@ void menu2_2()
         // pause();
     }
 }
+
 void menu2_3()
+{
+    CLinkList L = nullptr;
+    int i;
+    int code;
+    ElemType a;
+    while (true)
+    {
+        clearScreen();
+        std::cout << "\n\t\t\t\t=======双链表=======\n"
+                  << "\t\t\t\t1. create\n"
+                  << "\t\t\t\t2. insertpre\n"
+                  << "\t\t\t\t3. insertpost\n"
+                  << "\t\t\t\t4. deleteV\n"
+                  << "\t\t\t\t5. deleteP\n"
+                  << "\t\t\t\t6. locate\n"
+                  << "\t\t\t\t7. printList\n"
+                  << "\t\t\t\t0. 返回\n"
+                  << "\t\t\t\t===================================\n";
+
+        std::cout << "\n请输入命令序号: ";
+        if (!(std::cin >> code))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "无效输入，请输入数字。" << std::endl;
+            pause();
+            continue;
+        }
+
+        switch ((int)code)
+        {
+        case 1:
+            createCLinkList(L);
+            break;
+        case 2:
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertPreCLinkNode(L, i, a);
+            break;
+        case 3:
+            std::cout << "请输入插入位置和元素值: ";
+            std::cin >> i;
+            std::cin >> a;
+            insertAfterCLinkNode(L, i, a);
+            break;
+        case 4:
+            std::cout << "请输入要删除的元素值: ";
+            std::cin >> a;
+            deleteCLinkValue(L, a);
+            break;
+        case 5:
+            std::cout << "请输入要删除的位置: ";
+            std::cin >> i;
+            deleteCLinkPosition(L, i);
+            break;
+        case 6:
+            std::cout << "请输入要查找的元素值: ";
+            std::cin >> a;
+            locateCLinkValue(L, a);
+            break;
+        case 7:
+            std::cout << "正在打印：" << std::endl;
+            printCLinkList(L);
+            pause();
+            break;
+        case 0:
+            std::cout << "感谢您的使用！" << std::endl;
+            return;
+        default:
+            std::cout << "未知命令！" << std::endl;
+        }
+
+        // pause();
+    }
+}
+
+void menu2_4()
 {
     CLinkList L = nullptr;
     int i;
@@ -754,6 +913,46 @@ void menu2_3()
             std::cout << "正在打印：" << std::endl;
             printCLinkList(L);
             pause();
+            break;
+        case 0:
+            std::cout << "感谢您的使用！" << std::endl;
+            return;
+        default:
+            std::cout << "未知命令！" << std::endl;
+        }
+
+        // pause();
+    }
+}
+
+void menu2_5()
+{
+    int code;
+    while (true)
+    {
+        clearScreen();
+        std::cout << "\n\t\t\t\t=======约瑟夫环=======\n"
+                  << "\t\t\t\t1. 以顺序表解决约瑟夫环\n"
+                  << "\t\t\t\t2. 以循环单链表解决约瑟夫环\n"
+                  << "\t\t\t\t0. 返回\n"
+                  << "\t\t\t\t===================================\n";
+
+        std::cout << "\n请输入命令序号: ";
+        if (!(std::cin >> code))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "无效输入，请输入数字。" << std::endl;
+            pause();
+            continue;
+        }
+
+        switch ((int)code)
+        {
+        case 1:
+            SeqJos();
+            break;
+        case 2:
             break;
         case 0:
             std::cout << "感谢您的使用！" << std::endl;
@@ -859,12 +1058,13 @@ void menu2()
             menu2_2();
             break;
         case 3:
-            break;
-        case 4:
             menu2_3();
             break;
+        case 4:
+            menu2_4();
+            break;
         case 5:
-
+            menu2_5();
             break;
         case 6:
 
