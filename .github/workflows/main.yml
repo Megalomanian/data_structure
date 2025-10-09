@@ -31,8 +31,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: auto-${{ github.run_number }}
-          name: Auto Build #${{ github.run_number }}
-          body: Auto build for ${{ matrix.os }}
+          name: Latest Auto Build #${{ github.run_number }}
+          body: Auto build for Windows and Linux
           artifacts: ${{ matrix.exe }}
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true          # 两次上传同一个 release
