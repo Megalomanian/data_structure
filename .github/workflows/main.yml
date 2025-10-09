@@ -1,0 +1,39 @@
+name: Build 12024242193.cpp
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        include:
+          - os: ubuntu-latest
+            exe: 12024242193
+          - os: windows-latest
+            exe: 12024242193.exe
+
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      contents: write   # 写 Releases
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        run: clang++ -std=c++17 -O2 -static ${{ github.workspace }}/12024242193.cpp -o ${{ matrix.exe }}
+
+      - name: Upload to Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: auto-${{ github.run_number }}
+          name: Auto Build #${{ github.run_number }}
+          body: Auto build for ${{ matrix.os }}
+          artifacts: ${{ matrix.exe }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true          # 两次上传同一个 release
+          prerelease: false
