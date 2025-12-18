@@ -5,12 +5,9 @@
 #include <string>
 #include <limits>
 #include <sstream>
-
 #include <cstring>
 #include <algorithm>
 #include <clocale>
-
-
 #define MAXSIZE 100
 
 #ifndef HUFFMAN_H
@@ -3211,7 +3208,7 @@ int main()
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
 
-	setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "zh_CN.UTF-8");
 
 	main_menu();
 	return 0;
