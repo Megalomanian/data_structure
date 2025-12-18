@@ -5,6 +5,10 @@
 #include <string>
 #include <limits>
 #include <sstream>
+
+#include <cstring>
+#include <algorithm>
+
 #define MAXSIZE 100
 
 #ifndef HUFFMAN_H
@@ -1683,9 +1687,6 @@ void huffmanMain()
 	printf("\n======== 实验结束 ========\n");
 	pause();
 }
-
-#include <stdio.h>
-#include <stdlib.h>
 
 // --- 常量定义 ---
 #define MAX_VERTICES 100 // 最大顶点数
