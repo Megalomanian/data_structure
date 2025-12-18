@@ -11,7 +11,7 @@
 #define HUFFMAN_H
 
 #define MAX_CHARS 27	   // 26个英文字符 + 1个空格符
-#define MAX_CODE_LENGTH 10 // 假设最大编码长度不超过10位
+#define MAX_CODE_LENGTH 32 // 假设最大编码长度不超过32位
 #define NUM_SYMBOLS 27
 
 // 哈夫曼树节点结构体
@@ -1681,6 +1681,7 @@ void huffmanMain()
 	free(decoded_result);
 
 	printf("\n======== 实验结束 ========\n");
+	pause();
 }
 
 #include <stdio.h>
@@ -2845,7 +2846,7 @@ void select_sort(int a[], int n)
 		}
 	}
 }
-void hill_sort(int a[], int n)
+void shell_sort(int a[], int n)
 {
 	int gap, i, j, temp;
 	for (gap = n / 2; gap > 0; gap /= 2)
@@ -2894,6 +2895,71 @@ void print_arr(int a[], int n)
 }
 void sort_menu()
 {
+	clearScreen();
+	clock_t start, end;
+	double cpu_time_used;
+	std::cout << "排序算法演示程序" << std::endl;
+	int rand_numbers[30];
+	srand((unsigned)time(NULL));
+	for (int i = 0; i < 30; i++)
+	{
+		rand_numbers[i] = rand() % 1000;
+	}
+	std::cout << "原始数组：" << std::endl;
+	print_arr(rand_numbers, 30);
+	int sort_numbers[30] = {};
+
+	std::copy(rand_numbers, rand_numbers + 30, sort_numbers);
+	start = clock();
+	bubble_sort(sort_numbers, 30);
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+	std::cout << "冒泡排序结果：" << std::endl;
+	printf("算法运行时间: %f 秒\n", cpu_time_used);
+	print_arr(sort_numbers, 30);
+	memset(sort_numbers, 0, sizeof(sort_numbers));
+
+	std::copy(rand_numbers, rand_numbers + 30, sort_numbers);
+	start = clock();
+	insert_sort(sort_numbers, 30);
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+	std::cout << "插入排序结果：" << std::endl;
+	printf("算法运行时间: %f 秒\n", cpu_time_used);
+	print_arr(sort_numbers, 30);
+	memset(sort_numbers, 0, sizeof(sort_numbers));
+
+	std::copy(rand_numbers, rand_numbers + 30, sort_numbers);
+	start = clock();
+	select_sort(sort_numbers, 30);
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+	std::cout << "选择排序结果：" << std::endl;
+	printf("算法运行时间: %f 秒\n", cpu_time_used);
+	print_arr(sort_numbers, 30);
+	memset(sort_numbers, 0, sizeof(sort_numbers));
+
+	std::copy(rand_numbers, rand_numbers + 30, sort_numbers);
+	start = clock();
+	shell_sort(sort_numbers, 30);
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+	std::cout << "希尔排序结果：" << std::endl;
+	printf("算法运行时间: %f 秒\n", cpu_time_used);
+	print_arr(sort_numbers, 30);
+	memset(sort_numbers, 0, sizeof(sort_numbers));
+
+	std::copy(rand_numbers, rand_numbers + 30, sort_numbers);
+	start = clock();
+	quick_sort(sort_numbers, 0, 29);
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+	std::cout << "快速排序结果：" << std::endl;
+	printf("算法运行时间: %f 秒\n", cpu_time_used);
+	print_arr(sort_numbers, 30);
+	memset(sort_numbers, 0, sizeof(sort_numbers));
+
+	pause();
 }
 
 void menu1()
