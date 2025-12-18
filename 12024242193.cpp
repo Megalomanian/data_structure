@@ -8,6 +8,8 @@
 
 #include <cstring>
 #include <algorithm>
+#include <clocale>
+
 
 #define MAXSIZE 100
 
@@ -2314,6 +2316,7 @@ void menu2_5()
 				  << "\t\t\t\t===================================\n";
 
 		std::cout << "\n请输入命令序号: ";
+
 		if (!(std::cin >> code))
 		{
 			std::cin.clear();
@@ -3207,6 +3210,8 @@ int main()
 	// improve i/o performance slightly
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
+
+	setlocale(LC_ALL, "");
 
 	main_menu();
 	return 0;
